@@ -7,9 +7,7 @@ import com.cardManagement.cardmanagementapp.exceptions.BillingCycleException;
 
 public interface BillingCycleService {
 
-    BillingCycle createBillingCycle(LocalDate startDate, LocalDate endDate) throws BillingCycleException;
-
-    void generateBillingCycle() throws BillingCycleException;
+    BillingCycle createBillingCycle() throws BillingCycleException;
 
     BillingCycle getBillingCycleById(Integer cycleId) throws BillingCycleException;
 

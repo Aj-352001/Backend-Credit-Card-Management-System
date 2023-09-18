@@ -7,12 +7,12 @@ import com.cardManagement.cardmanagementapp.exceptions.BillPaymentException;
 
 public interface BillPaymentsService {
 
-	BillPayment addBillPayment(BillPayment newBillPayment) throws BillPaymentException;
+	BillPayment addBillPayment(Long creditCardNumber,Double amount) throws BillPaymentException;
 
 	BillPayment getBillPaymentById(Integer Id) throws BillPaymentException;
+	
+	//Void generateBillingCycle() throws BillPaymentException;
 
 	List<BillPayment> getAllBillPayments();
-
-	BillPayment updateAmount(Long creditCardNumber, Double amount) throws BillPaymentException;
 
 }

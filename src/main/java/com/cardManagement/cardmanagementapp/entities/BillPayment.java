@@ -1,18 +1,32 @@
 package com.cardManagement.cardmanagementapp.entities;
 
 import javax.persistence.Entity;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+
+/****************************************************************************
+ * Author           - Yash Tatiya
+ * Description      - BillPayment is a JPA entity representing a payment made by a user in the application.
+ *                    This class defines the structure and properties of a payment entity, including the payment's unique identifier (paymentId),
+ *                    bill amount, payment type, associated credit card number, and the amount paid.
+ *                  -The @Entity annotation marks this class as a JPA entity, allowing it to be mapped to a relational database table.
+                    -The @Id annotation indicates that the userId property is the primary key for the entity.
+                    -The @GeneratedValue annotation specifies that the userId is generated automatically using an identity strategy.
+
+ * Version           1.0
+ * Created Date      12-Sept-2023 
+ ****************************************************************************/
 @Entity
 public class BillPayment {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer paymentId;
-	@NotNull
-	private Double billAmount;
+	private Double billAmount=0.0;
 	private String paymentType;	
-	@NotNull
-	private Long  creditCardId;
+	private Long  creditCardNumber;
 	
 	private Double paidAmount = 0.0;
 	
@@ -26,7 +40,13 @@ public class BillPayment {
 		this.paymentId = paymentId;
 		this.billAmount = billAmount;
 		this.paymentType = paymentType;
-		this.creditCardId = creditCardNumber;
+		this.creditCardNumber = creditCardNumber;
+		this.paidAmount = paidAmount;
+	}
+
+	public BillPayment(String paymentType, Double paidAmount) {
+		super();
+		this.paymentType = paymentType;
 		this.paidAmount = paidAmount;
 	}
 
@@ -55,11 +75,11 @@ public class BillPayment {
 	}
 
 	public Long getCreditCardNumber() {
-		return creditCardId;
+		return creditCardNumber;
 	}
 
 	public void setCreditCardNumber(Long creditCardNumber) {
-		this.creditCardId = creditCardNumber;
+		this.creditCardNumber = creditCardNumber;
 	}
 
 	public Double getPaidAmount() {
@@ -73,7 +93,7 @@ public class BillPayment {
 	@Override
 	public String toString() {
 		return "BillPayment [paymentId=" + paymentId + ", billAmount=" + billAmount + ", paymentType=" + paymentType
-				+ ", creditCardNumber=" + creditCardId + ", paidAmount=" + paidAmount + "]";
+				+ ", creditCardNumber=" + creditCardNumber + ", paidAmount=" + paidAmount + "]";
 	}
 	
 	

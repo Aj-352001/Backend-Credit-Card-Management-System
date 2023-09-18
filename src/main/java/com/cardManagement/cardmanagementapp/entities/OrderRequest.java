@@ -1,28 +1,45 @@
 package com.cardManagement.cardmanagementapp.entities;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.annotation.Id;
 
+
+/****************************************************************************
+ * Author           - Yash Tatiya
+ * Description      - OrderRequest is a class representing a request to create an order in the application.
+ *                    This class defines the structure and properties of an order request, including the unique identifier (id),
+ *                    customer name, email, credit card number, and the order amount.
+ *                  -The @Entity annotation marks this class as a JPA entity, allowing it to be mapped to a relational database table.
+                    -The @Id annotation indicates that the userId property is the primary key for the entity.
+ * Version           1.0
+ * Created Date      12-Sept-2023 
+ ****************************************************************************/
 public class OrderRequest {
-	
 	@Id
-	Integer id;
-	String customerName;
-	String email;
-	String phoneNumber;
-	Double amount;
+	private Integer id;
+	private String customerName;
+	private String email;
+	@NotNull
+	private Long creditCardNumber;
+	@NotNull
+	private Double amount;
 
 	public OrderRequest() {
 		super();
 	}
+	
 
-	public OrderRequest(Integer id, String customerName, String email, String phoneNumber, Double amount) {
+	public OrderRequest(Integer id, String customerName, String email, @NotNull Long creditCardNumber,
+			@NotNull Double amount) {
 		super();
 		this.id = id;
 		this.customerName = customerName;
 		this.email = email;
-		this.phoneNumber = phoneNumber;
+		this.creditCardNumber = creditCardNumber;
 		this.amount = amount;
 	}
+
 
 	public Integer getId() {
 		return id;
@@ -48,12 +65,12 @@ public class OrderRequest {
 		this.email = email;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public Long getCreditCardNumber() {
+		return creditCardNumber;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setCreditCardNumber(Long creditCardNumber) {
+		this.creditCardNumber = creditCardNumber;
 	}
 
 	public Double getAmount() {
@@ -64,10 +81,11 @@ public class OrderRequest {
 		this.amount = amount;
 	}
 
+
 	@Override
 	public String toString() {
-		return "OrderRequest [id=" + id + ", customerName=" + customerName + ", email=" + email + ", phoneNumber="
-				+ phoneNumber + ", amount=" + amount + "]";
+		return "OrderRequest [id=" + id + ", customerName=" + customerName + ", email=" + email + ", creditCardNumber="
+				+ creditCardNumber + ", amount=" + amount + "]";
 	}
 	
 }

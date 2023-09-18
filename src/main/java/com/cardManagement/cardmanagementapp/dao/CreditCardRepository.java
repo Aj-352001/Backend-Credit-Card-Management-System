@@ -7,8 +7,8 @@ import com.cardManagement.cardmanagementapp.entities.CreditCard;
 
 public interface CreditCardRepository extends JpaRepository<CreditCard, Integer>{
 
-	Boolean existsByCreditCardId(Long creditCardId);
+	Boolean existsByCreditCardNumber(Long creditCardNumber);
 	
-	Optional<CreditCard> findByCreditCardId(Long creditCardId);
+	Optional<CreditCard> findByCreditCardNumber(Long creditCardNumber);
 
 }

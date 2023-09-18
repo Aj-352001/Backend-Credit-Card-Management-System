@@ -6,7 +6,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
+/******************************************************************************
+ * @author           Ronit Patil
+ * Description       BillingCycle is a JPA entity representing billing cycle of the credit card in the application.
+                     This class defines the structure and properties of billing cycle entity, including the billing cycle's unique identifier (cycleId),
+                     startDate, endDate, gracePeriod.
+                     -The @Entity annotation marks this class as a JPA entity, allowing it to be mapped to a relational database table.
+                     -The @Id annotation indicates that the userId property is the primary key for the entity.
+                     -The @GeneratedValue annotation specifies that the userId is generated automatically using an identity strategy.
+ * Version           1.0
+ * Created Date      12-Sept-2023 
+ ******************************************************************************/
 @Entity
 public class BillingCycle {
 	

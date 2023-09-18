@@ -5,29 +5,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import org.hibernate.annotations.GenericGenerator;
-
+/******************************************************************************
+ * @author           Anjali Kalange
+ * Description       CreditCard is a JPA entity representing a credit card assigned to the user by the application applied.This class defines the structure and properties of a credit card entity,which
+   					 includes the creditcard's unique identifier, creditcardNumber, user's name, issue date of card, cardlender, expiryDate, cardlimit based on the income of the user, cvv encrypted, pin, 
+   					 creditscore, outstanding balance of card, available balance, due balance, and card type.
+                     -The @Entity annotation marks this class as a JPA entity, allowing it to be mapped to a relational database table.
+                     -The @Id annotation indicates that the creditcardNumber property is the primary key for the entity.
+                     -The @GeneratedValue annotation specifies that the creditcardNumber is generated automatically using an identity strategy.
+ * Version           1.0
+ * Created Date      12-Sept-2023 
+ ******************************************************************************/
 @Entity
 public class CreditCard {
+
 	@Id
-	private Long creditCardId;
-	// access card type from application
+	private Long creditCardNumber;
+	private String name;
+	private LocalDate issueDate;
 	private String cardLender;
 	private LocalDate expiryDate;
 	private Double cardLimit;
 	private String cvv;
 	private Integer pin;
 	private Integer creditScore;
-	// just for display
 	private Double outstandingBalance;
 	private Double availableBalance;
 	private Double dueBalance;
+	private CardType type;
 	@OneToMany
 	List<PaymentTransactions> transactions = new ArrayList<PaymentTransactions>();
 	@OneToOne
@@ -35,15 +44,24 @@ public class CreditCard {
 	@OneToMany
 	List<Statement> statements = new ArrayList<Statement>();
 
+	/**
+	 * Default constructor
+	 */
 	public CreditCard() {
 		super();
 	}
-
-	public CreditCard(Long creditCardId, String cardLender, LocalDate expiryDate, Double cardLimit, String cvv,
-			Integer pin, Integer creditScore, Double outstandingBalance, Double availableBalance, Double dueBalance,
-			List<PaymentTransactions> transactions, BillingCycle billCycle, List<Statement> statements) {
+	
+	/**
+	 * Constructors for creating an Application with class properties.
+	 */
+	public CreditCard(Long creditCardNumber, String name, LocalDate issueDate, String cardLender, LocalDate expiryDate,
+			Double cardLimit, String cvv, Integer pin, Integer creditScore, Double outstandingBalance,
+			Double availableBalance, Double dueBalance, CardType type, List<PaymentTransactions> transactions,
+			BillingCycle billCycle, List<Statement> statements) {
 		super();
-		this.creditCardId = creditCardId;
+		this.creditCardNumber = creditCardNumber;
+		this.name = name;
+		this.issueDate = issueDate;
 		this.cardLender = cardLender;
 		this.expiryDate = expiryDate;
 		this.cardLimit = cardLimit;
@@ -53,17 +71,35 @@ public class CreditCard {
 		this.outstandingBalance = outstandingBalance;
 		this.availableBalance = availableBalance;
 		this.dueBalance = dueBalance;
+		this.type = type;
 		this.transactions = transactions;
 		this.billCycle = billCycle;
 		this.statements = statements;
 	}
 
-	public Long getCreditCardId() {
-		return creditCardId;
+	//Getter and setter methods for class properties
+	public String getName() {
+		return name;
 	}
 
-	public void setCreditCardId(Long creditCardId) {
-		this.creditCardId = creditCardId;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Long getCreditCardNumber() {
+		return creditCardNumber;
+	}
+
+	public void setCreditCardNumber(Long creditCardNumber) {
+		this.creditCardNumber = creditCardNumber;
+	}
+
+	public LocalDate getIssueDate() {
+		return issueDate;
+	}
+
+	public void setIssueDate(LocalDate issueDate) {
+		this.issueDate = issueDate;
 	}
 
 	public String getCardLender() {
@@ -138,6 +174,14 @@ public class CreditCard {
 		this.dueBalance = dueBalance;
 	}
 
+	public CardType getType() {
+		return type;
+	}
+
+	public void setType(CardType type) {
+		this.type = type;
+	}
+
 	public List<PaymentTransactions> getTransactions() {
 		return transactions;
 	}
@@ -162,15 +206,4 @@ public class CreditCard {
 		this.statements = statements;
 	}
 
-	@Override
-	public String toString() {
-		return "CreditCard [creditCardId=" + creditCardId + ", cardLender=" + cardLender + ", expiryDate=" + expiryDate
-				+ ", cardLimit=" + cardLimit + ", cvv=" + cvv + ", pin=" + pin + ", creditScore=" + creditScore
-				+ ", outstandingBalance=" + outstandingBalance + ", availableBalance=" + availableBalance
-				+ ", dueBalance=" + dueBalance + ", transactions=" + transactions + ", billCycle=" + billCycle
-				+ ", statements=" + statements + "]";
-	}
-	
-
-	
 }

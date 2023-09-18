@@ -7,12 +7,12 @@ public class ApplicationMapper {
 	public static ApplicationDto mapToApplicationDto(Application newApplication) {
 		ApplicationDto applicationDto=new ApplicationDto(
 				newApplication.getApplicationId(),
+				newApplication.getName(),
 				newApplication.getPanNumber(),
 				newApplication.getAadharNumber(),
 				newApplication.getDateOfBirth(),
 				newApplication.getIncome(),
-				newApplication.getStatus(),
-				newApplication.getCardType()
+				newApplication.getStatus()
 				);
 		
 		return applicationDto;
@@ -21,12 +21,12 @@ public class ApplicationMapper {
 	public static Application mapToApplication(ApplicationDto applicationDto) {
 		Application newapplication=new Application(
 				applicationDto.getApplicationId(),
+				applicationDto.getName(),
 				applicationDto.getPanNumber(),
 				applicationDto.getAadharNumber(),
 				applicationDto.getDateOfBirth(),
 				applicationDto.getIncome(),
-				applicationDto.getStatus(),
-				applicationDto.getCardType()
+				applicationDto.getStatus()
 				);
 		
 		return newapplication;

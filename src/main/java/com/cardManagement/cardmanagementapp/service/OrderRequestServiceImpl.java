@@ -7,13 +7,23 @@ import org.springframework.stereotype.Service;
 
 import com.cardManagement.cardmanagementapp.entities.OrderRequest;
 import com.cardManagement.cardmanagementapp.entities.OrderResponse;
+import com.cardManagement.cardmanagementapp.exceptions.BillPaymentException;
 import com.razorpay.Order;
 import com.razorpay.RazorpayException;
 import com.razorpay.RazorpayClient;
 
-
+/****************************************************************************
+ * Class                    - OrderRequestServiceImpl
+ * Description              - Implementation of the OrderRequestService interface.
+ * @Autowired billPaymentsServiceImpl - Service for bill payments.
+ * Updated by                [Yash Tatiya]
+ * Updated Date              [12-sept-2023]
+ ****************************************************************************/
 @Service
 public class OrderRequestServiceImpl implements OrderRequestService{
+	
+	@Autowired
+	private BillPaymentsServiceImpl billPaymentsServiceImpl;
 	
 	
 	
@@ -24,7 +34,15 @@ public class OrderRequestServiceImpl implements OrderRequestService{
 	private static final String SECRET_ID2 = "rzp_test_J4fInjDpTX475d";
 	private static final String SECRET_KEY2 = "r8fNXAB78RmsVfdiQbWGwyjr";
 
-
+	/****************************************************************************
+	 * Method                    - createRazorPayOrder
+	 * Description               - Creates a RazorPay order with the specified amount.
+	 * @param amount             - The order amount.
+	 * @return Order             - The created RazorPay Order object.
+	 * @throws RazorpayException - Raised if there's an error during order creation.
+	 * Author                    - [Yash Tatiya]
+	 * Updated Date              - [12/09/2023]
+	 ****************************************************************************/
 	public Order createRazorPayOrder(Double amount) throws RazorpayException{
 		 // You can enable this if you want to do Auto Capture.
 		JSONObject optionOrder = new JSONObject();
@@ -35,7 +53,15 @@ public class OrderRequestServiceImpl implements OrderRequestService{
 			return this.client.orders.create(optionOrder);	
 	}
 	
-	
+	/****************************************************************************
+	 * Method                   - createOrder
+	 * Description              - Creates a RazorPay order based on the provided OrderRequest.
+	 * @param orderRequest      - The order request containing details like amount, credit card number, etc.
+	 * @return OrderResponse    - The response containing order information.
+	 * @throws RazorpayException - Raised if there's an error during order creation.
+	 * Author                   - [Yash Tatiya]
+	 * Updated Date             - [12/09/2023]
+	 ****************************************************************************/
 	@Override
 	public OrderResponse createOrder(OrderRequest orderRequest) throws RazorpayException {
 		OrderResponse response = new OrderResponse();
@@ -64,15 +90,17 @@ public class OrderRequestServiceImpl implements OrderRequestService{
 				response.setSecretId(SECRET_ID2);
 				response.setPgName("razor2");
 			}
+			try {
+				this.billPaymentsServiceImpl.addBillPayment(orderRequest.getCreditCardNumber(),orderRequest.getAmount());
+			} catch (BillPaymentException e) {
+				e.printStackTrace();
+			}
 			return response;
 		} catch (RazorpayException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return response;
 		
 		
 	}
-
-
 }

@@ -1,5 +1,13 @@
 package com.cardManagement.cardmanagementapp.entities;
 
+/****************************************************************************
+ * Author           - [Yash Tatiya]
+ * Description      - OrderResponse is a class representing the response to an order creation request.
+ *                    This class defines the structure and properties of an order response, including the secret key,
+ *                    Razorpay order ID, application fee, secret ID, and payment gateway name.
+ *                    1.0
+ *                    12-Sept-2023 
+ ****************************************************************************/
 public class OrderResponse {
 
 	String secretKey;

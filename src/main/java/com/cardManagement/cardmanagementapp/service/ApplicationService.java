@@ -5,18 +5,21 @@ import java.util.List;
 
 import com.cardManagement.cardmanagementapp.dto.ApplicationDto;
 import com.cardManagement.cardmanagementapp.entities.Application;
-import com.cardManagement.cardmanagementapp.entities.CardApprovalStatus;
 import com.cardManagement.cardmanagementapp.exceptions.ApplicationException;
 
 public interface ApplicationService {
 
-	String createApplication(ApplicationDto newApplication) throws ApplicationException;
+	String createApplication(ApplicationDto newApplication, Integer userId) throws ApplicationException;
 
-	ApplicationDto displayApplicationById(Integer id) throws ApplicationException;
+	ApplicationDto displayApplicationById(Integer userId) throws ApplicationException;
 
 	List<ApplicationDto> displayAllApplications();
-
-	ApplicationDto updateApplicationStatus(Integer id, CardApprovalStatus status) throws ApplicationException;
-
-	String deleteApplicationById(Integer id) throws ApplicationException;
+	
+	String deleteApplicationById(Integer userId, Integer applicationId) throws ApplicationException;
+	
+ 	List<Application> getApplicationByUserId(Integer userId) throws ApplicationException;
+	
+	//get application by user id. remove mapping of user in application.
+	
+	
 }

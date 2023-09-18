@@ -1,13 +1,14 @@
 package com.cardManagement.cardmanagementapp.controller;
 
-import java.util.Collection;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,72 +17,102 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cardManagement.cardmanagementapp.dto.ApplicationDto;
 import com.cardManagement.cardmanagementapp.entities.Application;
-import com.cardManagement.cardmanagementapp.entities.CardApprovalStatus;
 import com.cardManagement.cardmanagementapp.exceptions.ApplicationException;
 import com.cardManagement.cardmanagementapp.service.ApplicationService;
-
+/******************************************************************************
+ * @author           Anjali Kalange
+ * Description       ApplicationController is responsible for managing user-related operations via RESTful endpoints.
+                     It handles user registration for credit card.
+                     It provides endpoints to interact with user data in the system.
+ * Endpoints:
+ * - POST /application/{userId}: Register a new application for credit card.
+ * - GET /application/{Id}: Retrieve application by applicationId.
+ * - GET /apllications : Retrieve all applications.
+ * - GET /application/{userId}: Retrieve application by userId.
+ * - DELETE /application/{userId}/{applicationId}: Delete a user application.
+ 
+ * Version           1.0
+ * Created Date      12-Sept-2023 
+ ******************************************************************************/
 @RestController
+@RequestMapping("api/v1")
 @CrossOrigin(origins = "http://localhost:4200")
+@Validated
 public class ApplicationController {
 
 	@Autowired
 	private ApplicationService applicationService;
 
-	@RequestMapping("/v1")
-
-	// APPLICATION OF PARTICULAR USER/CUSTOMER
+	/******************************************************************************
+     * Method                       -getApplicationById
+     * Description                  -get application based on the application id.
+     * @param applicationId 	    -The application Id data to be get.
+     * @return ApplicationDto       -The retrived Application Dto object representing the user application.
+     * @throws ApplicationException -Raised if there's an issue with application not present.
+     * Created by                   Anjali Kalange
+     * Created Date                 12-Sept-2023 
+     ******************************************************************************/
 	@GetMapping("/application/{id}")
-	public ApplicationDto getApplicationById(@PathVariable("id") Integer id) throws ApplicationException {
-		try {
-			return this.applicationService.displayApplicationById(id);
-		} catch (ApplicationException e) {
-			throw e;
-		}
+	public ApplicationDto getApplicationById(@PathVariable("id") Integer id) throws ApplicationException {		
+			return this.applicationService.displayApplicationById(id);	
 	}
 
-	// ADDING AN APPLICATION
-	@PostMapping("/application/")
-	public String addApplication(@RequestBody ApplicationDto newApplication) throws ApplicationException {
-		try {
-			this.applicationService.createApplication(newApplication);
-			return "application successful";
-		} catch (ApplicationException e) {
-			throw e;
-		}
+	/******************************************************************************
+     * Method                   -addApplication
+     * Description              -post application based on the UserId.
+     * @param newApplication    -The application data to be validated.
+     * @param userId            - Id of user
+     * @return String	        -The message of successful creation of Application object representing the user application.
+     * @throws ApplicationException -Raised if there's an issue with application applying.
+     * Created by                Anjali Kalange
+     * Created Date              12-Sept-2023 
+     ******************************************************************************/
+	@PostMapping("/application/{userId}")
+	public String addApplication(@RequestBody @Valid ApplicationDto newApplication, @PathVariable Integer userId) throws ApplicationException {
+		this.applicationService.createApplication(newApplication,userId);
+		return "application successful";
 
 	}
 
-	// DISPLAYING ALL THE APPLICATIONS
+	/******************************************************************************
+     * Method                  		 -displayAllApplications
+     * Description              	 -get all the applications.
+     * @return Applications     	 -List of user applications
+     * @throws ApplicationException  -Raised if an application is not present.
+     * Created by                	  Anjali Kalange
+     * Created Date             	  12-Sept-2023 
+     ******************************************************************************/
 	@GetMapping("/applications/")
-	public List<ApplicationDto> displayAllApplication()
-			throws ApplicationException {
-		try {
-			return this.applicationService.displayAllApplications();
-		} catch (Exception e) {
-			// TODO: handle exception
-			throw e;
-		}
+	public List<ApplicationDto> displayAllApplications() throws ApplicationException {
+		return this.applicationService.displayAllApplications();
 	}
 
-	// UPDATING THE STATUS OF THE APPLICATION BY ADMIN
-	@PatchMapping("/application/{id}/{status}")
-	public ApplicationDto updateApplicationStatus(@PathVariable Integer id, @PathVariable CardApprovalStatus status)
-			throws Exception {
-		try {
-			return this.applicationService.updateApplicationStatus(id, status);
-		} catch (ApplicationException e) {
-			throw e;
-		}
+	/******************************************************************************
+     * Method                  		 -deleteApplicationById
+     * Description              	 -deletes an application by Id.
+     * @param userId		     	 -Id of user
+     * @param ApplicationId	     	 -Id of application
+     * @return String		     	 -The string message of successful deletion of application.
+     * @throws ApplicationException  -Raised if  application is not present.
+     * Created by                	  Anjali Kalange
+     * Created Date             	  12-Sept-2023 
+     ******************************************************************************/
+	@DeleteMapping("/application/{userId}/{applicationId}")
+	public String deleteApplicationById(@PathVariable Integer userId, @PathVariable Integer applicationId) throws ApplicationException {
+		return this.applicationService.deleteApplicationById(userId, applicationId);
 	}
 
-	// DELETING THE APPLICATION BY USER
-	@DeleteMapping("/delapplication/{id}")
-	public String deleteApplication(@PathVariable Integer id) throws ApplicationException {
-		try {
-			return this.applicationService.deleteApplicationById(id);
-		} catch (ApplicationException e) {
-			throw e;
-		}
+	/******************************************************************************
+     * Method                   	-getApplicationByUserId
+     * Description              	-get applications based on the UserId.
+     * @param userId		 		-Id of user
+     * @return List<Application>    -The List of Application objects representing the user applications.
+     * @throws ApplicationException -Raised if an application is not present.
+     * Created by                	Anjali Kalange
+     * Created Date              	12-Sept-2023 
+     ******************************************************************************/
+	@GetMapping("/applications/{userId}")
+	public List<Application> getApplicationByUserId(@PathVariable Integer userId) throws ApplicationException{
+		return this.applicationService.getApplicationByUserId(userId);
 	}
-
 }

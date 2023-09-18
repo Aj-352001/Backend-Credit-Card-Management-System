@@ -11,6 +11,13 @@ import com.cardManagement.cardmanagementapp.entities.BillingCycle;
 import com.cardManagement.cardmanagementapp.entities.CreditCard;
 import com.cardManagement.cardmanagementapp.exceptions.BillingCycleException;
 
+/******************************************************************************
+ * @author           Ronit Patil
+ * Description       It is a Service implementation class that provides services for
+ 					 creating billing cycle and retrieving billing cycle.
+ * Version           1.0
+ * Created Date      12-Sept-2023 
+ ******************************************************************************/
 @Service
 public class BillingCycleServiceImpl implements BillingCycleService{
 
@@ -19,59 +26,53 @@ public class BillingCycleServiceImpl implements BillingCycleService{
 	
 	@Autowired
 	CreditCardRepository creditCardRepo;
-
 	
+	@Autowired
+	BillingCycleService billingCycleService;
 
+	/******************************************************************************
+     * Method                   -getBillingCycleById
+     * Description              -Retrieves billing cycle by ID.
+     * @param cycleId           -Id of cycle used to retrieve the billing cycle.
+     * @return BillingCycle     -returns billing cycle of particular Id.
+     * Created by                Ronit Patil
+     * Created Date              12-Sept-2023 
+     ******************************************************************************/
 	@Override
 	public BillingCycle getBillingCycleById(Integer cycleId) throws BillingCycleException {
-		
-		return billingCycleRepo.findById(cycleId).orElseThrow(() -> new BillingCycleException("Billing cycle not found"));
-		
+	    if (cycleId == null || cycleId <= 0) {
+	        throw new IllegalArgumentException("Invalid cycleId");
+	    }
+	    try {
+	        return billingCycleRepo.findById(cycleId)
+	                .orElseThrow(() -> new BillingCycleException("Billing cycle not found for ID: " + cycleId));
+	    } catch (Exception e) {
+	        throw new BillingCycleException("Error while retrieving billing cycle by ID: " + cycleId);
+	    }
 	}
-
-
-
+	
+	/******************************************************************************
+     * Method                   -createBillingCycle
+     * Description              -creates billing cycle for credit card.
+     * @return BillingCycle     -Creates billing cycle for a particular credit card.
+     * Created by                Ronit Patil
+     * Created Date              12-Sept-2023 
+     ******************************************************************************/
 	@Override
-	public BillingCycle createBillingCycle(LocalDate startDate, LocalDate endDate) throws BillingCycleException {
-		 BillingCycle billingCycle = new BillingCycle();
+	public BillingCycle createBillingCycle() throws BillingCycleException {
+	    try {
+	        BillingCycle billingCycle = new BillingCycle();
+	        LocalDate currentDate = LocalDate.now();
+	        LocalDate startDate = currentDate.withDayOfMonth(1);
+	        LocalDate endDate = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
 	        billingCycle.setStartDate(startDate);
 	        billingCycle.setEndDate(endDate);
 	        billingCycle.setGracePeriod(endDate.plusDays(10));
 	        return billingCycleRepo.save(billingCycle);
-		
+	    }
+	    catch (Exception e) {        
+	        throw new BillingCycleException("Error while creating billing cycle");
+	    }
 	}
 
-	@Override
-	public void generateBillingCycle() throws BillingCycleException {
-		LocalDate currentDate = LocalDate.now();
-        LocalDate startDate = currentDate.withDayOfMonth(1);
-        LocalDate endDate = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
-        createBillingCycle(startDate, endDate);				
-	}
-
-//	public BillingCycle createBillingCycle(LocalDate startDate, LocalDate endDate, CreditCard creditCardId)
-//            throws BillingCycleException {
-//        // Checking if the credit card already has an active billing cycle
-//        if (creditCard.hasActiveBillingCycle()) {
-//            throw new BillingCycleException("Credit card already has an active billing cycle.");
-//        }
-//
-//        BillingCycle billingCycle = new BillingCycle();
-//        billingCycle.setStartDate(startDate);
-//        billingCycle.setEndDate(endDate);
-//        billingCycle.setGracePeriod(endDate.plusDays(10));
-//        billingCycle.setCreditCard(creditCard);
-//
-//        // Save the billing cycle to the repository
-//        return billingCycleRepo.save(billingCycle);
-//    }
-	
-//	public void generateBillingCycle(CreditCard creditCardId) throws BillingCycleException {
-//        LocalDate currentDate = LocalDate.now();
-//        LocalDate startDate = currentDate.withDayOfMonth(1);
-//        LocalDate endDate = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
-//
-//        // Create a billing cycle for the credit card
-//        createBillingCycle(startDate, endDate, creditCardId);
-//    }
 }

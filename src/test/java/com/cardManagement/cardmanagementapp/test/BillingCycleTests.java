@@ -26,7 +26,7 @@ public class BillingCycleTests {
 	
 	@Test
     public void testGetBillingCycleById() throws BillingCycleException {
-        Integer validCycleId = 1; // Assuming you have a billing cycle with ID 1 in your test data
+        Integer validCycleId = 1; 
         BillingCycle billingCycle;
 		try {
 			billingCycle = billingCycleService.getBillingCycleById(validCycleId);
@@ -43,7 +43,7 @@ public class BillingCycleTests {
         LocalDate endDate = startDate.plusMonths(1);
         BillingCycle billingCycle;
 		try {
-			billingCycle = billingCycleService.createBillingCycle(startDate, endDate);
+			billingCycle = billingCycleService.createBillingCycle();
 			 assertNotNull(billingCycle);
 		     assertEquals(startDate, billingCycle.getStartDate());
 		     assertEquals(endDate, billingCycle.getEndDate());
@@ -52,19 +52,5 @@ public class BillingCycleTests {
 			throw e;
 		}
     }
-	
-//	@Test
-//	public void testGenerateBillingCycle() throws BillingCycleException{
-//	    int initialBillingCycleCount = billingCycleRepo.findAll().size();
-//
-//	    try {
-//			billingCycleService.generateBillingCycle();
-//		} catch (BillingCycleException e) {
-//			throw e;
-//		}
-//
-//	    int updatedBillingCycleCount = billingCycleRepo.findAll().size();
-//	    assertEquals(initialBillingCycleCount + 1, updatedBillingCycleCount);
-//	}
 	
 }
